@@ -1,0 +1,164 @@
+<h2 class="role">Choose Role</h2>
+<div>
+  <div *ngFor="let r of role" class="form-check form-check-inline">
+    <input class="form-check-input" type="radio" name="role" [id]="'role-' + r.nom" (click)="selectRole(r)">
+    <label class="form-check-label" [for]="'role-' + r.nom">{{ r.nom }}</label>
+  </div>
+</div>
+
+  
+  <div class="details" *ngIf="selectedRole">
+    <div class="recentOrders">
+        <div class="cardHeader">
+            <h2>Permission</h2>
+        </div>
+
+        <table>
+            <thead>
+              <tr>
+                <th>Function</th>
+                <th>Read</th>
+                <th>Write</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Teams</td>
+                <td>
+                  <input style="margin-right: 100%;" type="checkbox" [(ngModel)]="teamsReadPermission">
+                </td>
+                <td>
+                  <input style="margin-right: 90%;" type="checkbox" [(ngModel)]="teamsWritePermission">
+                </td>
+              </tr>
+
+              <tr>
+                <td>Permission</td>
+                <td>
+                  <input style="margin-right: 100%;" type="checkbox" [(ngModel)]="permissionReadPermission">
+                </td>
+                <td>
+                  <input style="margin-right: 90%;" type="checkbox" [(ngModel)]="permissionWritePermission">
+                </td>
+              </tr>
+
+              <tr>
+                <td>Companies</td>
+                <td>
+                  <input style="margin-right: 100%;" type="checkbox" [(ngModel)]="companiesReadPermission">
+                </td>
+                <td>
+                  <input style="margin-right: 90%;" type="checkbox" [(ngModel)]="companiesWritePermission">
+                </td>
+              </tr>
+
+              <tr>
+                <td>Audit</td>
+                <td>
+                  <input  style="margin-right: 100%;" type="checkbox" [(ngModel)]="auditReadPermission">
+                </td>
+                <td>
+                  <input style="margin-right: 90%;" type="checkbox" [(ngModel)]="auditWritePermission">
+                </td>
+              </tr>
+
+              <tr>
+                <td>Control Lists</td>
+                <td>
+                  <input style="margin-right: 100%;" type="checkbox" [(ngModel)]="controllistReadPermission">
+                </td>
+                <td>
+                  <input  style="margin-right: 90%;" type="checkbox" [(ngModel)]="controllistWritePermission">
+                </td>
+              </tr>
+
+              <tr>
+                <td>Documents</td>
+                <td>
+                  <input style="margin-right: 100%;" type="checkbox" [(ngModel)]="documentsReadPermission">
+                </td>
+                <td>
+                  <input  style="margin-right: 90%;" type="checkbox" [(ngModel)]="documentsWritePermission">
+                </td>
+              </tr>
+
+              <tr>
+                <td>Meeting</td>
+                <td>
+                  <input style="margin-right: 100%;" type="checkbox" [(ngModel)]="meetingReadPermission">
+                </td>
+                <td>
+                  <input  style="margin-right: 90%;" type="checkbox" [(ngModel)]="meetingWritePermission">
+                </td>
+              </tr>
+
+              <tr>
+                <td>Tasks</td>
+                <td>
+                  <input style="margin-right: 100%;" type="checkbox" [(ngModel)]="tasksReadPermission">
+                </td>
+                <td>
+                  <input  style="margin-right: 90%;" type="checkbox" [(ngModel)]="tasksWritePermission">
+                </td>
+              </tr>
+
+              <tr>
+                <td>Requirement</td>
+                <td>
+                  <input style="margin-right: 100%;" type="checkbox" [(ngModel)]="requirementReadPermission">
+                </td>
+                <td>
+                  <input  style="margin-right: 90%;" type="checkbox" [(ngModel)]="requirementWritePermission">
+                </td>
+              </tr>
+
+              <tr>
+                <td>Perimeter</td>
+                <td>
+                  <input style="margin-right: 100%;" type="checkbox" [(ngModel)]="perimeterReadPermission">
+                </td>
+                <td>
+                  <input  style="margin-right: 90%;" type="checkbox" [(ngModel)]="perimeterWritePermission">
+                </td>
+              </tr>
+
+              <tr>
+                <td>Objectives</td>
+                <td>
+                  <input style="margin-right: 100%;" type="checkbox" [(ngModel)]="objectivesReadPermission">
+                </td>
+                <td>
+                  <input  style="margin-right: 90%;" type="checkbox" [(ngModel)]="objectivesWritePermission">
+                </td>
+              </tr>
+
+              <tr>
+                <td>Norm</td>
+                <td>
+                  <input style="margin-right: 100%;" type="checkbox" [(ngModel)]="normReadPermission">
+                </td>
+                <td>
+                  <input  style="margin-right: 90%;" type="checkbox" [(ngModel)]="normWritePermission">
+                </td>
+              </tr>
+
+              <tr>
+                <td>Criteria</td>
+                <td>
+                  <input style="margin-right: 100%;" type="checkbox" [(ngModel)]="criteriaReadPermission">
+                </td>
+                <td>
+                  <input  style="margin-right: 90%;" type="checkbox" [(ngModel)]="criteriaWritePermission">
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="addTeams">
+            <button type="button" class="btn btn-secondary" (click)="addpermission()">+Add Permission</button> 
+          </div>        
+    </div>
+  
+ 
+  </div>
+  
+  

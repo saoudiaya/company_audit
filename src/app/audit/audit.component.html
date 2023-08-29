@@ -1,0 +1,303 @@
+<div class="addTeams">
+    <button type="button" class="btn btn-secondary" (click)="open(mymodal)">+Add Audit</button> 
+</div>
+<ng-template #mymodal let-modal>
+          
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Add Audit</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">×</span>
+    </button>
+  </div>
+
+  <div class="add-box">
+    <form class="formulaire" [formGroup]="form">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="inputName">Name</label>
+          <input type="text" formControlName="nom" class="form-control" id="inputName" placeholder="Name">
+          <!-- Error message -->
+          <div *ngIf="form.controls['nom']?.invalid && (form.controls['nom']?.dirty || form.controls['nom']?.touched)" class="error-message">
+            <span *ngIf="form.controls['nom']?.errors?.['required']" style="color: rgb(146, 10, 10); margin-top: 10%; margin-bottom: 10%;">Name is required.</span>
+          </div>
+        </div>
+      </div>
+      <div class="form-group col-md-6">
+        <label for="inputStartDate">Start Date</label>
+        <input type="Date" formControlName="startday" class="form-control" id="inputStartDate" placeholder="Start Date"
+        [ngModel]="form.controls['startday'].value | date:'MM/dd/yy'" (ngModelChange)="form.controls['startday'].setValue($event)">
+        <!-- Error message -->
+        <div *ngIf="form.controls['startday'].invalid && (form.controls['startday'].dirty || form.controls['startday'].touched)" class="error-message">
+          <span *ngIf="form.controls['startday']?.errors?.['required']" style="color: rgb(146, 10, 10); margin-top: 10%; margin-bottom: 10%;">Start Date is required.</span>
+        </div>
+      </div>
+      <div class="form-group col-md-6">
+        <label for="inputEndDate">End Date</label>
+        <input type="Date" formControlName="endday" class="form-control" id="inputEndDate" placeholder="End Date"
+        [ngModel]="form.controls['endday'].value | date:'MM/dd/yy'" (ngModelChange)="form.controls['endday'].setValue($event)">
+        <!-- Error message -->
+        <div *ngIf="form.controls['endday'].invalid && (form.controls['endday'].dirty || form.controls['endday'].touched)" class="error-message">
+          <span *ngIf="form.controls['endday']?.errors?.['required']" style="color: rgb(146, 10, 10); margin-top: 10%; margin-bottom: 10%;">End Date is required.</span>
+        </div>
+      </div>
+      <div class="form-group col-md-6">
+        <label for="inputUser">User</label>
+        <select formControlName="user" class="form-control" id="inputuser">
+          <option value="">Select a user</option>
+          <option *ngFor="let t of team" [value]="t.nom">{{ t.nom }}</option>
+        </select>
+        <div *ngIf="form.controls['user']?.invalid && (form.controls['user']?.dirty || form.controls['user']?.touched)" class="error-message">
+          <span *ngIf="form.controls['user']?.errors?.['required']" style="color: rgb(146, 10, 10); margin-top: 10%; margin-bottom: 10%;">User is required.</span>
+        </div>
+      </div>
+      <div class="form-group col-md-6">
+        <label for="inputCompany">Company</label>
+        <select formControlName="company" class="form-control" id="inputCompany">
+          <option value="">Select a company</option>
+          <option *ngFor="let c of company" [value]="c.nom">{{ c.nom }}</option>
+        </select>
+        <div *ngIf="form.controls['company']?.invalid && (form.controls['company']?.dirty || form.controls['company']?.touched)" class="error-message">
+          <span *ngIf="form.controls['company']?.errors?.['required']" style="color: rgb(146, 10, 10); margin-top: 10%; margin-bottom: 10%;">Company is required.</span>
+        </div>
+      </div>
+      <!-- Remaining form controls -->
+      <div class="form-group">
+        <label for="inputDescription">Description</label>
+        <input type="text" formControlName="description" class="form-control" id="inputDescription" placeholder="Description">
+        <!-- Error message -->
+        <div *ngIf="form.controls['description'].invalid && (form.controls['description'].dirty || form.controls['description'].touched)" class="error-message">
+          <span *ngIf="form.controls['description']?.errors?.['required']" style="color: rgb(146, 10, 10); margin-top: 10%; margin-bottom: 10%;">Description is required.</span>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-outline-dark" style="margin-left: 170px; margin-top: 20px;" (click)="addAudit()">Add Audit</button>
+    </form>
+  </div>
+  
+  
+</ng-template>
+<div class="input-group rounded">
+    <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" [(ngModel)]="searchQuery" (input)="searchTable()"/>
+    <span class="input-group-text border-0" id="search-addon">
+      <i class="fa fa-search"></i>
+    </span>
+</div>
+<div class="details">
+    <div class="recentOrders">
+        <div class="cardHeader">
+            <h2>Recent Audits</h2>
+            <a class="btn">View All</a>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <td>Name</td>
+                    <td>Type </td>
+                    <td>Start Day</td>
+                    <td>End Day</td>
+                    <td>Company</td>
+                    <td>Observation</td>
+                    <td>Status</td>
+                    <td>Action</td>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr *ngFor="let a of audit">
+                    <td>{{ a.nom }}</td>
+                    <td>{{ a.type }}</td>
+                    <td>{{ a.date_debut }}</td>
+                    <td>{{ a.date_fin }}</td>
+                    <td>{{ a.entreprise?.nom }}</td>
+                    <td>{{ a.observation }}</td>
+                    <td>
+                        <span class="status delivered" *ngIf="isFinished(a.date_fin)">Finished</span>
+                        <span class="status pending" *ngIf="!isFinished(a.date_fin)">In Progress</span>
+                    </td>
+                    <td>
+                        <div class="action_box">
+                            <button class="btn file-button" [disabled]="isFinished(a.date_fin)" (click)="open4(mymodal4)"><i class="fa fa-file"></i></button>
+                            <button class="btn delete-button" [disabled]="!isFinished(a.date_fin)" (click)="open1(mymodal1)"><i class="fa fa-trash" ></i></button>
+                            <button class="btn edit-button"  (click)="open2(mymodal2)"><i class="fa fa-pencil"></i></button>
+                            <button class="btn comments-button" (click)="open3(mymodal3)"><i class="fa fa-comments" ></i></button>
+
+                            <!--DELETE-->
+                            <ng-template #mymodal1 let-modal>
+          
+                                <div class="modal-header">
+                                  <h4 class="modal-title" id="modal-basic-title">Delete Audit</h4>
+                                  <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                                    <span aria-hidden="true">×</span>
+                                  </button>
+                                </div>
+                            
+                                <div class="add-box">
+                                    <form class="formulaire" [formGroup]="form">
+                                      
+                                        <div class="form-group col-md-6">
+                                          <label for="inputDateDelete">Date of deletion</label>
+                                          <input type="Date" formControlName="datedelete" class="form-control" id="inputDateDelete" placeholder="Date of deletion">
+                                        </div>
+                                        
+                                        <button type="submit" class="btn btn-outline-dark" style="margin-left: 170px; margin-top: 20px;" (click)="deleteAudit(a.id)">Delete Audit</button>
+                                      </form>
+                                </div>
+                                
+                            </ng-template>
+                            <!--EDIT-->
+                            <ng-template #mymodal2 let-modal>
+          
+                              <div class="modal-header">
+                                <h4 class="modal-title" id="modal-basic-title">Edit Audit</h4>
+                                <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                                  <span aria-hidden="true">×</span>
+                                </button>
+                              </div>
+                          
+                              <div class="add-box">
+                                  <form class="formulaire" [formGroup]="form">
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                          <label for="inputName">Name</label>
+                                          <input type="text" formControlName="nom" class="form-control" id="inputName" placeholder="{{a.nom}}">
+                                          <div *ngIf="form.controls['nom']?.invalid && (form.controls['nom']?.dirty || form.controls['nom']?.touched)" class="error-message">
+                                              <span *ngIf="form.controls['nom']?.errors?.['required']" style="color: rgb(146, 10, 10); margin-top: 10%; margin-bottom: 10%;">Name is required.</span>
+                                            </div>
+                                        </div>                                        
+                                      </div>
+                                      <div class="form-group col-md-6">
+                                        <label for="inputStartDate">Start Date</label>
+                                        <input type="Date" formControlName="startdate" class="form-control" id="inputStartDate" placeholder="{{a.date_debut}}">
+                                        <div *ngIf="form.controls['startdate']?.invalid && (form.controls['startdate']?.dirty || form.controls['startdate']?.touched)" class="error-message">
+                                          <span *ngIf="form.controls['startdate']?.errors?.['required']" style="color: rgb(146, 10, 10); margin-top: 10%; margin-bottom: 10%;">Start Date is required.</span>
+                                        </div>
+                                      </div>
+                                      <div class="form-group col-md-6">
+                                        <label for="inputEndDate">End Date</label>
+                                        <input type="Date" formControlName="enddate" class="form-control" id="inputEndDate" placeholder="{{a.date_fin}}">
+                                        <div *ngIf="form.controls['enddate']?.invalid && (form.controls['enddate']?.dirty || form.controls['enddate']?.touched)" class="error-message">
+                                          <span *ngIf="form.controls['enddate']?.errors?.['required']" style="color: rgb(146, 10, 10); margin-top: 10%; margin-bottom: 10%;">End Date is required.</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                      <label for="inputUser">User</label>
+                                      <select formControlName="user" class="form-control" id="inputuser">
+                                        <option value="">Select a user</option>
+                                        <option *ngFor="let t of team" [value]="t.id">{{ t.nom }}</option>
+                                      </select>
+                                      <div *ngIf="form.controls['user']?.invalid && (form.controls['user']?.dirty || form.controls['user']?.touched)" class="error-message">
+                                        <span *ngIf="form.controls['user']?.errors?.['required']" style="color: rgb(146, 10, 10); margin-top: 10%; margin-bottom: 10%;">User is required.</span>
+                                      </div>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                      <label for="inputCompany">Company</label>
+                                      <select formControlName="company" class="form-control" id="inputCompany">
+                                        <option value="">Select a company</option>
+                                        <option *ngFor="let c of company" [value]="c.id">{{ c.nom }}</option>
+                                      </select>
+                                      <div *ngIf="form.controls['company']?.invalid && (form.controls['company']?.dirty || form.controls['company']?.touched)" class="error-message">
+                                        <span *ngIf="form.controls['company']?.errors?.['required']" style="color: rgb(146, 10, 10); margin-top: 10%; margin-bottom: 10%;">Company is required.</span>
+                                      </div>
+                                    </div>
+                                      <div class="form-group">
+                                        <label for="inputDescription">Description</label>
+                                        <input type="text" formControlName="description" class="form-control" id="inputDescription" placeholder="Description">
+                                        <div *ngIf="form.controls['description']?.invalid && (form.controls['description']?.dirty || form.controls['description']?.touched)" class="error-message">
+                                            <span *ngIf="form.controls['description']?.errors?.['required']" style="color: rgb(146, 10, 10); margin-top: 10%; margin-bottom: 10%;">Description is required.</span>
+                                          </div>
+                                    </div>
+                                      <button type="submit" class="btn btn-outline-dark" style="margin-left: 170px; margin-top: 20px;" (click)="EditAudit(a.id)">Edit Audit</button>
+                                    </form>
+                              </div>
+                              
+                          </ng-template>
+                          <!--ADD NOTE-->
+                          <ng-template #mymodal3 let-modal>
+          
+                            <div class="modal-header">
+                              <h4 class="modal-title" id="modal-basic-title">Add Note</h4>
+                              <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                                <span aria-hidden="true">×</span>
+                              </button>
+                            </div>
+                        
+                            <div class="add-box">
+                                <form class="formulaire" [formGroup]="form">
+                                  <div class="form-row">
+                                    <div class="form-group">
+                                      <label for="inputNote">Note</label>
+                                      <input type="text" formControlName="note" class="form-control" id="inputNote" placeholder="Note">
+                                  </div>
+                                  </div>
+                                    <button type="submit" class="btn btn-outline-dark" style="margin-left: 170px; margin-top: 20px;" (click)="EditAudit2(a.id)">Add Note</button>
+                                  </form>
+                            </div>
+                            
+                        </ng-template>
+                        <!--Rapport-->
+                        <ng-template #mymodal4 let-modal>
+                          <div class="modal-header">
+                            <h4 class="modal-title" id="modal-basic-title">Generate A Non-Compliance Report</h4>
+                            <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                              <span aria-hidden="true">×</span>
+                            </button>
+                          </div>
+                      
+                          <div class="add-box">
+                              <form class="formulaire" [formGroup]="formR">
+                                <div class="form-row">
+                                    <div class="form-group">
+                                      <label for="inputNumber">Number of Non-Compliance</label>
+                                      <input type="number" formControlName="number" class="form-control" id="inputNumber" placeholder="Number of Non-Compliance">
+                                      <div *ngIf="form.controls['number']?.invalid && (form.controls['number']?.dirty || form.controls['number']?.touched)" class="error-message">
+                                          <span *ngIf="form.controls['number']?.errors?.['required']" style="color: rgb(146, 10, 10); margin-top: 10%; margin-bottom: 10%;">Number of Non-Compliance is required.</span>
+                                        </div>
+                                    </div>                                        
+                                  </div>
+                                  <div class="form-group">
+                                    <label for="inputProcess">Process</label>
+                                    <input type="text" formControlName="process" class="form-control" id="inputProcess" placeholder="Process">
+                                    <div *ngIf="form.controls['process']?.invalid && (form.controls['process']?.dirty || form.controls['process']?.touched)" class="error-message">
+                                        <span *ngIf="form.controls['process']?.errors?.['required']" style="color: rgb(146, 10, 10); margin-top: 10%; margin-bottom: 10%;">Process is required.</span>
+                                      </div>
+                                </div>
+                                <div class="form-group">
+                                  <label for="inputNumberA">Number of article</label>
+                                  <input type="number" formControlName="numberA" class="form-control" id="inputNumberA" placeholder="NumberA">
+                                  <div *ngIf="form.controls['numberA']?.invalid && (form.controls['numberA']?.dirty || form.controls['numberA']?.touched)" class="error-message">
+                                      <span *ngIf="form.controls['numberA']?.errors?.['required']" style="color: rgb(146, 10, 10); margin-top: 10%; margin-bottom: 10%;">NumberA is required.</span>
+                                    </div>
+                              </div>
+                                  <div class="form-group">
+                                    <label for="inputDescription">Description</label>
+                                    <input type="text" formControlName="description" class="form-control" id="inputDescription" placeholder="Description">
+                                    <div *ngIf="form.controls['description']?.invalid && (form.controls['description']?.dirty || form.controls['description']?.touched)" class="error-message">
+                                        <span *ngIf="form.controls['description']?.errors?.['required']" style="color: rgb(146, 10, 10); margin-top: 10%; margin-bottom: 10%;">Description is required.</span>
+                                      </div>
+                                </div>
+                                <div class="form-group">
+                                  <div class="form-check form-check-inline">
+                                    <input class="form-check-input" formControlName="level" type="radio" name="flexRadioDefault" id="flexRadioDefault1" [(ngModel)]="selectedRole" value="Major" checked>
+                                    <label class="form-check-label" for="flexRadioDefault1">
+                                      Major 
+                                    </label>
+                                  </div>
+                                  <div class="form-check form-check-inline">
+                                    <input class="form-check-input" formControlName="level" type="radio" name="flexRadioDefault" id="flexRadioDefault2" [(ngModel)]="selectedRole" value="Minor">
+                                    <label class="form-check-label" for="flexRadioDefault2">
+                                      Minor
+                                    </label>
+                                  </div>
+                                </div>
+                                  <button type="submit" class="btn btn-outline-dark" style="margin-left: 140px; margin-right: 10px; margin-top: 20px;" (click)="submitReport()">Submit Report</button>
+                                  <button type="submit" class="btn btn-outline-dark" style="margin-top: 20px;" (click)="generatePDF()">Download PDF</button>
+                                </form>
+                          </div>
+                          
+                      </ng-template>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>

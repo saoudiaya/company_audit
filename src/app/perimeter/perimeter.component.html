@@ -1,0 +1,125 @@
+<div class="addTeams">
+    <button type="button" class="btn btn-secondary" (click)="open(mymodal)">+Add Perimeter</button> 
+</div>
+<ng-template #mymodal let-modal>
+          
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Add Perimeter</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">×</span>
+    </button>
+  </div>
+
+  <div class="add-box">
+      <form class="formulaire" [formGroup]="form">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="inputName">Name</label>
+              <input type="text" formControlName="nom" class="form-control" id="inputName" placeholder="Name">
+              <div *ngIf="form.controls['nom']?.invalid && (form.controls['nom']?.dirty || form.controls['nom']?.touched)" class="error-message">
+                  <span *ngIf="form.controls['nom']?.errors?.['required']" style="color: rgb(146, 10, 10); margin-top: 10%; margin-bottom: 10%;">Name is required.</span>
+                </div>
+            </div>
+            <div class="form-group">
+              <label for="inputDescription">Description</label>
+              <input type="text" formControlName="description" class="form-control" id="inputDescription" placeholder="Description">
+              <div *ngIf="form.controls['description']?.invalid && (form.controls['description']?.dirty || form.controls['description']?.touched)" class="error-message">
+                  <span *ngIf="form.controls['description']?.errors?.['required']" style="color: rgb(146, 10, 10); margin-top: 10%; margin-bottom: 10%;">Description is required.</span>
+                </div>
+          </div>
+          <div class="form-group col-md-6">
+            <label for="inputAudit">Audit</label>
+            <select formControlName="audit" class="form-control" id="inputAudit">
+              <option value="">Select an audit</option>
+              <option *ngFor="let a of audit" [value]="a.id">{{ a.nom }}</option>
+            </select> 
+            <div *ngIf="form.controls['audit']?.invalid && (form.controls['audit']?.dirty || form.controls['audit']?.touched)" class="error-message">
+              <span *ngIf="form.controls['audit']?.errors?.['required']" style="color: rgb(146, 10, 10); margin-top: 10%; margin-bottom: 10%;">Audit is required.</span>
+            </div>
+          </div>
+          </div>
+          <button type="submit" class="btn btn-outline-dark" style="margin-left: 170px; margin-top: 20px;" (click)="addPerimeter()">Add Perimeter</button>
+        </form>
+  </div>
+  
+</ng-template>
+<div class="input-group rounded">
+    <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" [(ngModel)]="searchQuery" (input)="searchTable()"/>
+    <span class="input-group-text border-0" id="search-addon">
+      <i class="fa fa-search"></i>
+    </span>
+</div>
+<div class="details">
+    <div class="recentOrders">
+        <div class="cardHeader">
+            <h2>Recent Perimeter</h2>
+            <a class="btn">View All</a>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <td>Name</td>
+                    <td>Audit</td>
+                    <td>Action</td>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr *ngFor="let p of perimeter">
+                    <td>{{ p.nom }}</td>
+                    <td>{{ p.audit.nom }}</td>
+
+                    <td>
+                        <div class="action_box">
+                            <button class="btn delete-button" (click)="deletePerimeter(p.id)"><i class="fa fa-trash"></i></button>
+                            <button class="btn edit-button"  (click)="open1(mymodal1)"><i class="fa fa-pencil"></i></button>
+                            <ng-template #mymodal1 let-modal>
+          
+                              <div class="modal-header">
+                                <h4 class="modal-title" id="modal-basic-title">Edit Perimeter</h4>
+                                <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                                  <span aria-hidden="true">×</span>
+                                </button>
+                              </div>
+                          
+                              <div class="add-box">
+                                  <form class="formulaire" [formGroup]="form">
+                                    <div class="form-row">
+                                      <div class="form-group">
+                                        <label for="inputName">Name</label>
+                                        <input type="text" formControlName="nom" class="form-control" id="inputName" placeholder="{{p.nom}}">
+                                        <div *ngIf="form.controls['nom']?.invalid && (form.controls['nom']?.dirty || form.controls['nom']?.touched)" class="error-message">
+                                            <span *ngIf="form.controls['nom']?.errors?.['required']" style="color: rgb(146, 10, 10); margin-top: 10%; margin-bottom: 10%;">Name is required.</span>
+                                          </div>
+                                      </div>
+                                      <div class="form-group">
+                                        <label for="inputDescription">Description</label>
+                                        <input type="text" formControlName="description" class="form-control" id="inputDescription" placeholder="Description">
+                                        <div *ngIf="form.controls['description']?.invalid && (form.controls['description']?.dirty || form.controls['description']?.touched)" class="error-message">
+                                            <span *ngIf="form.controls['description']?.errors?.['required']" style="color: rgb(146, 10, 10); margin-top: 10%; margin-bottom: 10%;">Description is required.</span>
+                                          </div>
+                                    </div>
+                                    
+                                    <div class="form-group col-md-6">
+                                      <label for="inputAudit">Audit</label>
+                                      <select formControlName="audit" class="form-control" id="inputAudit">
+                                        <option value="">Select an audit</option>
+                                        <option *ngFor="let a of audit" [value]="a.id">{{ a.nom }}</option>
+                                      </select> 
+                                      <div *ngIf="form.controls['audit']?.invalid && (form.controls['audit']?.dirty || form.controls['audit']?.touched)" class="error-message">
+                                        <span *ngIf="form.controls['audit']?.errors?.['required']" style="color: rgb(146, 10, 10); margin-top: 10%; margin-bottom: 10%;">Audit is required.</span>
+                                      </div>
+                                    </div>
+                                    </div>
+                                      <button type="submit" class="btn btn-outline-dark" style="margin-left: 170px; margin-top: 20px;" (click)="EditPerimeter(p.id)">Edit Perimeter</button>
+                                    </form>
+                              </div>
+                              
+                          </ng-template>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>

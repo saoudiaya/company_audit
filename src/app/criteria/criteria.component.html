@@ -1,0 +1,169 @@
+<div class="addTeams">
+    <button type="button" class="btn btn-secondary" (click)="open(mymodal)">+Add Criteria</button> 
+</div>
+<ng-template #mymodal let-modal>
+          
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Add Criteria</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">×</span>
+    </button>
+  </div>
+
+  <div class="add-box">
+      <form class="formulaire" [formGroup]="form">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="inputName">Name</label>
+              <input type="text" formControlName="nom" class="form-control" id="inputName" placeholder="Name">
+              <div *ngIf="form.controls['nom']?.invalid && (form.controls['nom']?.dirty || form.controls['nom']?.touched)" class="error-message">
+                  <span *ngIf="form.controls['nom']?.errors?.['required']" style="color: rgb(146, 10, 10); margin-top: 10%; margin-bottom: 10%;">Name is required.</span>
+                </div>
+            </div>
+            <div class="form-group">
+              <label for="inputDescription">Description</label>
+              <input type="text" formControlName="description" class="form-control" id="inputDescription" placeholder="Description">
+              <div *ngIf="form.controls['description']?.invalid && (form.controls['description']?.dirty || form.controls['description']?.touched)" class="error-message">
+                  <span *ngIf="form.controls['description']?.errors?.['required']" style="color: rgb(146, 10, 10); margin-top: 10%; margin-bottom: 10%;">Description is required.</span>
+                </div>
+              </div>
+          <div class="form-group col-md-6">
+            <label for="inputInterview">Interview</label>
+            <input type="text" formControlName="interview" class="form-control" id="inputInterview" placeholder="Interview">
+            <div *ngIf="form.controls['interview']?.invalid && (form.controls['interview']?.dirty || form.controls['interview']?.touched)" class="error-message">
+              <span *ngIf="form.controls['interview']?.errors?.['required']" style="color: rgb(146, 10, 10); margin-top: 10%; margin-bottom: 10%;">Interview is required.</span>
+            </div>
+          </div>
+          <div class="form-group col-md-6">
+            <label for="inputTechnicalV">Technical Verification</label>
+            <input type="text" formControlName="technicalV" class="form-control" id="inputTechnicalV" placeholder="Technical Verification">
+            <div *ngIf="form.controls['technicalV']?.invalid && (form.controls['technicalV']?.dirty || form.controls['technicalV']?.touched)" class="error-message">
+              <span *ngIf="form.controls['technicalV']?.errors?.['required']" style="color: rgb(146, 10, 10); margin-top: 10%; margin-bottom: 10%;">Technical Verification is required.</span>
+            </div>
+          </div>
+          <div class="form-group col-md-6">
+              <label for="inputAnalysis">Analysis</label>
+              <input type="text"  formControlName="analysis" class="form-control" id="inputAnalysis" placeholder="Analysis">
+              <div *ngIf="form.controls['analysis']?.invalid && (form.controls['analysis']?.dirty || form.controls['analysis']?.touched)" class="error-message">
+                  <span *ngIf="form.controls['analysis']?.errors?.['required']" style="color: rgb(146, 10, 10); margin-top: 10%; margin-bottom: 10%;">Analysis is required.</span>
+                </div>
+          </div>
+          <div class="form-group col-md-6">
+            <label for="inputNorm">Norm</label>
+            <select formControlName="norm" class="form-control" id="inputNorm">
+              <option value="">Select a norm</option>
+              <option *ngFor="let n of norm" [value]="n.id">{{ n.nom }}</option>
+            </select>
+            <div *ngIf="form.controls['norm']?.invalid && (form.controls['norm']?.dirty || form.controls['norm']?.touched)" class="error-message">
+              <span *ngIf="form.controls['norm']?.errors?.['required']" style="color: rgb(146, 10, 10); margin-top: 10%; margin-bottom: 10%;">Norm is required.</span>
+            </div>
+          </div>   
+          </div> 
+          <button type="submit" class="btn btn-outline-dark" style="margin-left: 170px; margin-top: 20px;" (click)="addCriteria()">Add Criteria</button>
+        </form>
+  </div>
+  
+</ng-template>
+<div class="input-group rounded">
+    <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" [(ngModel)]="searchQuery" (input)="searchTable()"/>
+    <span class="input-group-text border-0" id="search-addon">
+      <i class="fa fa-search"></i>
+    </span>
+</div>
+<div class="details">
+    <div class="recentOrders">
+        <div class="cardHeader">
+            <h2>Recent Criteria</h2>
+            <a class="btn">View All</a>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <td>Name</td>
+                    <td>Interview</td>
+                    <td>Analysis</td>
+                    <td>Norm</td>
+                    <td>Action</td>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr *ngFor="let c of criteria">
+                    <td>{{ c.nom }}</td>
+                    <td>{{ c.entretien }}</td>
+                    <td>{{ c.analyse }}</td>
+                    <td>{{ c.norm.nom }}</td>
+                    <td>
+                        <div class="action_box">
+                            <button class="btn delete-button" (click)="deleteCriteria(c.id)"><i class="fa fa-trash"></i></button>
+                            <button class="btn edit-button"  (click)="open1(mymodal1)"><i class="fa fa-pencil"></i></button>
+                            <ng-template #mymodal1 let-modal>
+          
+                              <div class="modal-header">
+                                <h4 class="modal-title" id="modal-basic-title">Edit Criteria</h4>
+                                <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                                  <span aria-hidden="true">×</span>
+                                </button>
+                              </div>
+                          
+                              <div class="add-box">
+                                  <form class="formulaire" [formGroup]="form">
+                                    <div class="form-row">
+                                      <div class="form-group">
+                                        <label for="inputName">Name</label>
+                                        <input type="text" formControlName="nom" class="form-control" id="inputName" placeholder="{{c.nom}}">
+                                        <div *ngIf="form.controls['nom']?.invalid && (form.controls['nom']?.dirty || form.controls['nom']?.touched)" class="error-message">
+                                            <span *ngIf="form.controls['nom']?.errors?.['required']" style="color: rgb(146, 10, 10); margin-top: 10%; margin-bottom: 10%;">Name is required.</span>
+                                          </div>
+                                      </div>
+                                      <div class="form-group">
+                                        <label for="inputDescription">Description</label>
+                                        <input type="text" formControlName="description" class="form-control" id="inputDescription" placeholder="Description">
+                                        <div *ngIf="form.controls['description']?.invalid && (form.controls['description']?.dirty || form.controls['description']?.touched)" class="error-message">
+                                            <span *ngIf="form.controls['description']?.errors?.['required']" style="color: rgb(146, 10, 10); margin-top: 10%; margin-bottom: 10%;">Description is required.</span>
+                                          </div>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                      <label for="inputInterview">Interview</label>
+                                      <input type="text" formControlName="interview" class="form-control" id="inputInterview" placeholder="{{c.entretien}}">
+                                      <div *ngIf="form.controls['interview']?.invalid && (form.controls['interview']?.dirty || form.controls['interview']?.touched)" class="error-message">
+                                        <span *ngIf="form.controls['interview']?.errors?.['required']" style="color: rgb(146, 10, 10); margin-top: 10%; margin-bottom: 10%;">Interview is required.</span>
+                                      </div>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                      <label for="inputTechnicalV">Technical Verification</label>
+                                      <input type="text" formControlName="technicalV" class="form-control" id="inputTechnicalV" placeholder="Technical Verification">
+                                      <div *ngIf="form.controls['technicalV']?.invalid && (form.controls['technicalV']?.dirty || form.controls['technicalV']?.touched)" class="error-message">
+                                        <span *ngIf="form.controls['technicalV']?.errors?.['required']" style="color: rgb(146, 10, 10); margin-top: 10%; margin-bottom: 10%;">Technical Verification is required.</span>
+                                      </div>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="inputAnalysis">Analysis</label>
+                                        <input type="text"  formControlName="analysis" class="form-control" id="inputAnalysis" placeholder="{{c.analyse}}">
+                                        <div *ngIf="form.controls['analysis']?.invalid && (form.controls['analysis']?.dirty || form.controls['analysis']?.touched)" class="error-message">
+                                            <span *ngIf="form.controls['analysis']?.errors?.['required']" style="color: rgb(146, 10, 10); margin-top: 10%; margin-bottom: 10%;">Analysis is required.</span>
+                                          </div>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                      <label for="inputNorm">Norm</label>
+                                      <select formControlName="norm" class="form-control" id="inputNorm">
+                                        <option value="">Select a norm</option>
+                                        <option *ngFor="let n of norm" [value]="n.id">{{ n.nom }}</option>
+                                      </select>
+                                      <div *ngIf="form.controls['norm']?.invalid && (form.controls['norm']?.dirty || form.controls['norm']?.touched)" class="error-message">
+                                        <span *ngIf="form.controls['norm']?.errors?.['required']" style="color: rgb(146, 10, 10); margin-top: 10%; margin-bottom: 10%;">Norm is required.</span>
+                                      </div>
+                                    </div>
+                                    </div>
+                                    <button type="submit" class="btn btn-outline-dark" style="margin-left: 170px; margin-top: 20px;" (click)="EditCriteria(c.id)">Edit Criteria</button>
+                                    </form>
+                              </div>
+                              
+                          </ng-template>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>

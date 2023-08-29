@@ -1,0 +1,225 @@
+<div class="container" [class.open]="isMenuOpen">
+    <div class="navigation">
+        <ul>
+            <li>
+                <a href="#">
+                    <span class="icon">
+                        <img src="../../assets/icons/logo tc.png" alt="" class="logo">
+                    </span>
+                    <span class="title1">Tunisian Cloud</span>
+                </a>
+            </li>
+
+            <li [class.active]="activePage === 'dashboard'">
+                <a (click)="showDashboard()">
+                  <span class="icon">
+                    <img src="../../assets/icons/house.png" alt="" class="menu"> 
+                  </span>
+                  <span class="title">Dashboard</span>
+                </a>
+              </li>
+              
+
+            <li [class.active]="activePage === 'teams'">
+                <a (click)="showTeams()">
+                    <span class="icon">
+                        <img src="../../assets/icons/groups.png" alt="" class="teams"> 
+                    </span>
+                    <span class="title">Teams</span>
+                </a>
+            </li>
+            <li [class.active]="activePage === 'permission'">
+                <a (click)="showPermission()">
+                    <span class="icon">
+                        <img src="../../assets/icons/shield (1).png" alt="" class="menu"> 
+                    </span>
+                    <span class="title">Permission</span>
+                </a>
+            </li>
+
+            <li [class.active]="activePage === 'companies'">
+                <a (click)="showCompanies()">
+                    <span class="icon">
+                        <img src="../../assets/icons/office-building.png" alt="" class="menu"> 
+                    </span>
+                    <span class="title">Companies</span>
+                </a>
+            </li>
+
+            <li [class.active]="activePage === 'audit'">
+                <a (click)="showAudit()">
+                    <span class="icon">
+                        <img src="../../assets/icons/search.png" alt="" class="menu"> 
+
+                    </span>
+                    <span class="title">Audit</span>
+                </a>
+            </li>
+
+            <li [class.active]="activePage === 'control'">
+                <a (click)="showControlList()">
+                    <span class="icon">
+                        <img src="../../assets/icons/clipboard.png" alt="" class="menu"> 
+                    </span>
+                    <span class="title">Control Lists</span>
+                </a>
+            </li>
+
+            <li [class.active]="activePage === 'document'">
+                <a (click)="showDocuments()">
+                    <span class="icon">
+                        <img src="../../assets/icons/document.png" alt="" class="menu"> 
+                    </span>
+                    <span class="title">Documents</span>
+                </a>
+            </li>
+
+            <li [class.active]="activePage === 'meeting'">
+                <a (click)="showMeeting()">
+                    <span class="icon">
+                        <img src="../../assets/icons/calendar.png" alt="" class="menu"> 
+                    </span>
+                    <span class="title">Meeting</span>
+                </a>
+            </li>
+            <li [class.active]="activePage === 'tasks'">
+                <a (click)="showTasks()">
+                    <span class="icon">
+                        <img src="../../assets/icons/to-do-list.png" alt="" class="menu"> 
+                    </span>
+                    <span class="title">Tasks</span>
+                </a>
+            </li>
+            <li [class.active]="activePage === 'requirement'">
+                <a (click)="showRequirement()">
+                    <span class="icon">
+                        <img src="../../assets/icons/job-hunting.png" alt="" class="menu"> 
+                    </span>
+                    <span class="title">Requirement</span>
+                </a>
+            </li>
+            <li [class.active]="activePage === 'perimeter'">
+                <a (click)="showPerimeter()">
+                    <span class="icon">
+                        <img src="../../assets/icons/perimeter.png" alt="" class="menu"> 
+                    </span>
+                    <span class="title">Perimeter</span>
+                </a>
+            </li>
+            <li [class.active]="activePage === 'objective'">
+                <a (click)="showObjective()">
+                    <span class="icon">
+                        <img src="../../assets/icons/goal.png" alt="" class="menu"> 
+                    </span>
+                    <span class="title">Objectives</span>
+                </a>
+            </li>
+            <li [class.active]="activePage === 'norm'">
+                <a (click)="showNorm()">
+                    <span class="icon">
+                        <img src="../../assets/icons/rules.png" alt="" class="menu"> 
+                    </span>
+                    <span class="title">Norm</span>
+                </a>
+            </li>
+            <li [class.active]="activePage === 'criteria'">
+                <a (click)="showCriteria ()">
+                    <span class="icon">
+                        <img src="../../assets/icons/search (1).png" alt="" class="menu"> 
+                    </span>
+                    <span class="title">Criteria </span>
+                </a>
+            </li>
+            <li>
+                <a>
+                    <span class="icon">
+                        <img src="../../assets/icons/question.png" alt="" class="menu"> 
+                    </span>
+                    <span class="title">Help</span>
+                </a>
+            </li>
+            <li>
+                <a>
+                    <span class="icon">
+                        <img src="../../assets/icons/settings.png" alt="" class="menu"> 
+                    </span>
+                    <span class="title">Settings</span>
+                </a>
+            </li>
+            <li>
+                <a routerLink="/signin">
+                    <span class="icon">
+                        <img src="../../assets/icons/logout.png" alt="" class="menu"> 
+                    </span>
+                    <span class="title">Sign Out</span>
+                </a>
+            </li>
+        </ul>
+        
+    </div>
+
+    <!-- ========================= Main ==================== -->
+    <div class="main">
+        <div class="topbar">
+            <div class="toggle"(click)="toggleMenu()">
+                <img src="../../assets/icons/menu.png" alt="" class="menu"> 
+            </div>
+
+            <div class="search">
+                <div>
+                    <label>
+                        <input type="text" placeholder="Search here">
+                        <img src="../../assets/icons/search-interface-symbol.png" alt="" class="search-icon">
+                    </label>
+                </div>
+            </div>
+            
+
+            <div class="user">
+                <img src="../../assets/front/customer01.jpg" alt="">
+            </div>
+        </div>
+        <div *ngIf="isDashboardVisible" class="dashboard-content">
+            <app-dashboard></app-dashboard>
+        </div> 
+        <div *ngIf="isTeamsVisible" class="teams-content">
+            <app-teams></app-teams>
+        </div>
+        <div *ngIf="isCompaniesVisible" class="companies-content">
+            <app-companies></app-companies>
+        </div>
+        <div *ngIf="isAuditVisible" class="audit-content">
+            <app-audit></app-audit>
+        </div> 
+        <div *ngIf="isControlListVisible" class="control-content">
+            <app-controllist></app-controllist>
+        </div> 
+        <div *ngIf="isDocumentsVisible" class="document-content">
+            <app-documents></app-documents>
+        </div>
+        <div *ngIf="isMeetingVisible" class="meeting-content">
+            <app-meeting></app-meeting>
+        </div>
+        <div *ngIf="isTasksVisible" class="tasks-content">
+            <app-tasks></app-tasks>
+        </div>
+        <div *ngIf="isPermissionVisible" class="permission-content">
+            <app-permission></app-permission>
+        </div>
+        <div *ngIf="isRequirementVisible" class="requirement-content">
+            <app-requirement></app-requirement>
+        </div>
+        <div *ngIf="isCriteriaVisible" class="criteria-content">
+            <app-criteria></app-criteria>
+        </div>
+        <div *ngIf="isNormVisible" class="norm-content">
+            <app-norm></app-norm>
+        </div>
+        <div *ngIf="isObjectiveVisible" class="objective-content">
+            <app-objective></app-objective>
+        </div>
+        <div *ngIf="isPerimeterVisible" class="perimeter-content">
+            <app-perimeter></app-perimeter>
+        </div>
+    </div>
+</div>

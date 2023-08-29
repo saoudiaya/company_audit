@@ -1,0 +1,192 @@
+<div class="addTeams">
+    <button type="button" class="btn btn-secondary" (click)="open(mymodal)">+Add Meeting</button> 
+</div>
+<ng-template #mymodal let-modal>
+          
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Add Meeting</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">×</span>
+    </button>
+  </div>
+
+  <div class="add-box">
+      <form class="formulaire" [formGroup]="form">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="inputName">Name</label>
+              <input type="text" formControlName="nom" class="form-control" id="inputName" placeholder="Name">
+              <div *ngIf="form.controls['nom']?.invalid && (form.controls['nom']?.dirty || form.controls['nom']?.touched)" class="error-message">
+                  <span *ngIf="form.controls['nom']?.errors?.['required']" style="color: rgb(146, 10, 10); margin-top: 10%; margin-bottom: 10%;">Name is required.</span>
+                </div>
+            </div>
+          </div>
+          <div class="form-group col-md-6">
+            <label for="inputStartTime">Start Time</label>
+            <input type="datetime-local" formControlName="starttime" class="form-control" id="inputStartTime" placeholder="Start Time">
+            <div *ngIf="form.controls['starttime']?.invalid && (form.controls['starttime']?.dirty || form.controls['starttime']?.touched)" class="error-message">
+              <span *ngIf="form.controls['starttime']?.errors?.['required']" style="color: rgb(146, 10, 10); margin-top: 10%; margin-bottom: 10%;">Start Time is required.</span>
+            </div>
+          </div>
+          <div class="form-group col-md-6">
+            <label for="inputEndTime">End Time</label>
+            <input type="datetime-local" formControlName="endtime" class="form-control" id="inputEndTime" placeholder="End Time">
+            <div *ngIf="form.controls['endtime']?.invalid && (form.controls['endtime']?.dirty || form.controls['endtime']?.touched)" class="error-message">
+              <span *ngIf="form.controls['endtime']?.errors?.['required']" style="color: rgb(146, 10, 10); margin-top: 10%; margin-bottom: 10%;">End Time is required.</span>
+            </div>
+          </div>
+          <div class="form-group col-md-6">
+            <label for="inputAudit">Audit</label>
+            <select formControlName="audit" class="form-control" id="inputAudit">
+              <option value="">Select an audit</option>
+              <option *ngFor="let a of audit" [value]="a.id">{{ a.nom }}</option>
+            </select>            
+            <div *ngIf="form.controls['audit']?.invalid && (form.controls['audit']?.dirty || form.controls['audit']?.touched)" class="error-message">
+              <span *ngIf="form.controls['audit']?.errors?.['required']" style="color: rgb(146, 10, 10); margin-top: 10%; margin-bottom: 10%;">Audit is required.</span>
+            </div>
+          </div>
+          <div class="form-group col-md-6">
+            <label for="inputUser">User</label>
+            <select formControlName="user" class="form-control" id="inputuser">
+              <option value="">Select a user</option>
+              <option *ngFor="let t of team" [value]="t.id">{{ t.nom }}</option>
+            </select>
+            <div *ngIf="form.controls['user']?.invalid && (form.controls['user']?.dirty || form.controls['user']?.touched)" class="error-message">
+              <span *ngIf="form.controls['user']?.errors?.['required']" style="color: rgb(146, 10, 10); margin-top: 10%; margin-bottom: 10%;">User is required.</span>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-outline-dark" style="margin-left: 170px; margin-top: 20px;" (click)="addMeeting()">Add Meeting</button>
+        </form>
+  </div>
+  
+</ng-template>
+<div class="input-group rounded">
+    <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" [(ngModel)]="searchQuery" (input)="searchTable()"/>
+    <span class="input-group-text border-0" id="search-addon">
+      <i class="fa fa-search"></i>
+    </span>
+</div>
+<div class="details">
+    <div class="recentOrders">
+        <div class="cardHeader">
+            <h2>Recent Meeting</h2>
+            <a class="btn">View All</a>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <td>Name</td>
+                    <td>Start Time</td>
+                    <td>End Time</td>
+                    <td>Audit</td>
+                    <td>Status</td>
+                    <td>Action</td>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr *ngFor="let m of meet">
+                  <td>{{ m.titre }}</td>
+                  <td>{{ m.date_debut | date:'MM/dd/yyyy hh:mm a' }}</td>
+                  <td>{{ m.date_fin | date:'MM/dd/yyyy hh:mm a' }}</td>
+                  <td>{{ m.audit.nom }}</td>
+                  <td>
+                    <span class="status delivered" *ngIf="getStatus(m.date_debut, m.date_fin) === 'Finished'">Finished</span>
+                    <span class="status pending" *ngIf="getStatus(m.date_debut, m.date_fin) == 'In Progress'">In Progress</span>
+                    <span class="status return" *ngIf="getStatus(m.date_debut, m.date_fin) == 'Not Yet'">Not Yet</span>
+                  </td>                                                                             
+                    <td>
+                        <div class="action_box">
+                            <button class="btn delete-button" [disabled]="getStatus(m.date_debut, m.date_fin) == 'In Progress'" (click)="deleteMeeting(m.id)"><i class="fa fa-trash"></i></button>
+                            <button class="btn edit-button"  (click)="open2(mymodal2)"><i class="fa fa-pencil"></i></button>
+                            <button class="btn comments-button" (click)="open3(mymodal3)"><i class="fa fa-comments" ></i></button>
+                            <!--EDIT-->
+                            <ng-template #mymodal2 let-modal>
+          
+                              <div class="modal-header">
+                                <h4 class="modal-title" id="modal-basic-title">Edit Meeting</h4>
+                                <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                                  <span aria-hidden="true">×</span>
+                                </button>
+                              </div>
+                          
+                              <div class="add-box">
+                                  <form class="formulaire" [formGroup]="form">
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                          <label for="inputName">Name</label>
+                                          <input type="text" formControlName="nom" class="form-control" id="inputName" placeholder="{{m.titre}}">
+                                          <div *ngIf="form.controls['nom']?.invalid && (form.controls['nom']?.dirty || form.controls['nom']?.touched)" class="error-message">
+                                              <span *ngIf="form.controls['nom']?.errors?.['required']" style="color: rgb(146, 10, 10); margin-top: 10%; margin-bottom: 10%;">Name is required.</span>
+                                            </div>
+                                        </div>
+                                      </div>
+                                      <div class="form-group col-md-6">
+                                        <label for="inputStartTime">Start Time</label>
+                                        <input type="datetime-local" formControlName="starttime" class="form-control" id="inputStartTime" placeholder="Start Time">
+                                        <div *ngIf="form.controls['starttime']?.invalid && (form.controls['starttime']?.dirty || form.controls['starttime']?.touched)" class="error-message">
+                                          <span *ngIf="form.controls['starttime']?.errors?.['required']" style="color: rgb(146, 10, 10); margin-top: 10%; margin-bottom: 10%;">Start Time is required.</span>
+                                        </div>
+                                      </div>
+                                      <div class="form-group col-md-6">
+                                        <label for="inputEndTime">End Time</label>
+                                        <input type="datetime-local" formControlName="endtime" class="form-control" id="inputEndTime" placeholder="End Time">
+                                        <div *ngIf="form.controls['endtime']?.invalid && (form.controls['endtime']?.dirty || form.controls['endtime']?.touched)" class="error-message">
+                                          <span *ngIf="form.controls['endtime']?.errors?.['required']" style="color: rgb(146, 10, 10); margin-top: 10%; margin-bottom: 10%;">End Time is required.</span>
+                                        </div>
+                                      </div>
+                                      <div class="form-group col-md-6">
+                                        <label for="inputAudit">Audit</label>
+                                        <select formControlName="audit" class="form-control" id="inputAudit">
+                                          <option value="">Select an audit</option>
+                                          <option *ngFor="let a of audit" [value]="a.id">{{ a.nom }}</option>
+                                        </select>                                        
+                                        <div *ngIf="form.controls['audit']?.invalid && (form.controls['audit']?.dirty || form.controls['audit']?.touched)" class="error-message">
+                                          <span *ngIf="form.controls['audit']?.errors?.['required']" style="color: rgb(146, 10, 10); margin-top: 10%; margin-bottom: 10%;">Audit is required.</span>
+                                        </div>
+                                      </div>
+                                      <div class="form-group col-md-6">
+                                        <label for="inputUser">User</label>
+                                        <select formControlName="user" class="form-control" id="inputuser">
+                                          <option value="">Select a user</option>
+                                          <option *ngFor="let t of team" [value]="t.id">{{ t.nom }}</option>
+                                        </select>
+                                        <div *ngIf="form.controls['user']?.invalid && (form.controls['user']?.dirty || form.controls['user']?.touched)" class="error-message">
+                                          <span *ngIf="form.controls['user']?.errors?.['required']" style="color: rgb(146, 10, 10); margin-top: 10%; margin-bottom: 10%;">User is required.</span>
+                                        </div>
+                                      </div>
+                                      <button type="submit" class="btn btn-outline-dark" style="margin-left: 170px; margin-top: 20px;" (click)="EditMeeting(m.id)">Edit Meeting</button>
+                                    </form>
+                              </div>
+                              
+                          </ng-template>
+                          <!--ADD NOTE-->
+                          <ng-template #mymodal3 let-modal>
+          
+                            <div class="modal-header">
+                              <h4 class="modal-title" id="modal-basic-title">Add Note</h4>
+                              <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                                <span aria-hidden="true">×</span>
+                              </button>
+                            </div>
+                        
+                            <div class="add-box">
+                                <form class="formulaire" [formGroup]="form">
+                                  <div class="form-row">
+                                    <div class="form-group">
+                                      <label for="inputNote">Note</label>
+                                      <input type="text" formControlName="note" class="form-control" id="inputNote" placeholder="Note">
+                                  </div>
+                                  </div>
+                                    <button type="submit" class="btn btn-outline-dark" style="margin-left: 170px; margin-top: 20px;" (click)="EditMeeting2(m.id)">Add Note</button>
+                                  </form>
+                            </div>
+                            
+                        </ng-template>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>

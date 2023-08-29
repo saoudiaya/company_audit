@@ -1,0 +1,198 @@
+<div class="addTeams">
+  <button type="button" class="btn btn-secondary" (click)="open(mymodal)">+Add User</button>
+</div>
+
+<ng-template #mymodal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Add User</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">×</span>
+    </button>
+  </div>
+
+  <div class="add-box">
+    <form class="formulaire" [formGroup]="form">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="inputName">Name</label>
+          <input type="text" formControlName="nom" class="form-control" id="inputName" placeholder="Name">
+          <div *ngIf="form.controls['nom']?.invalid && (form.controls['nom']?.dirty || form.controls['nom']?.touched)" class="error-message">
+            <span *ngIf="form.controls['nom']?.errors?.['required']" style="color: rgb(146, 10, 10); margin-top: 10%; margin-bottom: 10%;">Name is required.</span>
+          </div>
+        </div>
+        <div class="form-group col-md-6">
+          <label for="inputAdress">Address</label>
+          <input type="text" formControlName="address" class="form-control" id="inputAddress" placeholder="Address">
+          <div *ngIf="form.controls['address']?.invalid && (form.controls['address']?.dirty || form.controls['address']?.touched)" class="error-message">
+            <span *ngIf="form.controls['address']?.errors?.['required']" style="color: rgb(146, 10, 10); margin-top: 10%; margin-bottom: 10%;">Address is required.</span>
+          </div>
+        </div>
+      </div>
+      <div class="form-group col-md-6">
+        <label for="inputEmail">Email</label>
+        <input type="text" formControlName="email" class="form-control" id="inputEmail" placeholder="Email">
+        <div *ngIf="form.controls['email']?.invalid && (form.controls['email']?.dirty || form.controls['email']?.touched)" class="error-message">
+          <span *ngIf="form.controls['email']?.errors?.['required']" style="color: rgb(146, 10, 10); margin-top: 10%; margin-bottom: 10%;">Email is required.</span>
+        </div>
+      </div>
+      <div class="form-group col-md-6">
+        <label for="inputPhone">Phone</label>
+        <input type="text" formControlName="phone" class="form-control" id="inputPhone" placeholder="Phone">
+        <div *ngIf="form.controls['phone']?.invalid && (form.controls['phone']?.dirty || form.controls['phone']?.touched)" class="error-message">
+          <span *ngIf="form.controls['phone']?.errors?.['required']" style="color: rgb(146, 10, 10); margin-top: 10%; margin-bottom: 10%;">Phone is required.</span>
+        </div>
+      </div>
+      <div class="form-group col-md-6">
+        <label for="inputPassword">Password</label>
+        <input type="password" formControlName="password" class="form-control" id="inputPassword" placeholder="Password">
+        <div *ngIf="form.controls['password']?.invalid && (form.controls['password']?.dirty || form.controls['password']?.touched)" class="error-message">
+          <span *ngIf="form.controls['password']?.errors?.['required']" style="color: rgb(146, 10, 10); margin-top: 10%; margin-bottom: 10%;">Password is required.</span>
+        </div>
+      </div>
+      <div class="form-group col-md-6">
+        <label for="inputRole">Role</label>
+        <select formControlName="role_nom" class="form-control" id="inputRole">
+          <option value="">Select a role</option>
+          <option *ngFor="let r of role" [value]="r.nom">{{ r.nom }}</option>
+        </select>
+        <div *ngIf="form.controls['role_nom']?.invalid && (form.controls['role_nom']?.dirty || form.controls['role_nom']?.touched)" class="error-message">
+          <span *ngIf="form.controls['role_nom']?.errors?.['required']" style="color: rgb(146, 10, 10); margin-top: 10%; margin-bottom: 10%;">Role is required.</span>
+        </div>
+      </div>
+      
+      <div class="form-group col-md-6">
+        <label for="inputCompany">Company</label>
+        <select formControlName="entreprise" class="form-control" id="inputCompany">
+          <option value="">Select a company</option>
+          <option *ngFor="let c of company" [value]="c.id">{{ c.nom }}</option>
+        </select>
+        <div *ngIf="form.controls['entreprise']?.invalid && (form.controls['entreprise']?.dirty || form.controls['entreprise']?.touched)" class="error-message">
+          <span *ngIf="form.controls['entreprise']?.errors?.['required']" style="color: rgb(146, 10, 10); margin-top: 10%; margin-bottom: 10%;">Company is required.</span>
+        </div>
+      </div>
+      
+      <button type="submit" class="btn btn-outline-dark" style="margin-left: 170px; margin-top: 20px;" (click)="addTeams()" [disabled]="form.invalid">Add User</button>
+    </form>
+  </div>  
+</ng-template>
+  <div class="input-group rounded">
+      <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" [(ngModel)]="searchQuery" (input)="searchTable()"/>
+      <span class="input-group-text border-0" id="search-addon">
+        <i class="fa fa-search"></i>
+      </span>
+  </div>
+  <div class="details">
+      <div class="recentOrders">
+          <div class="cardHeader">
+              <h2>Recent Users</h2>
+              <a class="btn">View All</a>
+          </div>
+
+          <table>
+              <thead>
+                  <tr>
+                      <td>Name</td>
+                      <td>Email</td>
+                      <td>Phone</td>
+                      <td>Adress</td>
+                      <td>Company</td>
+                      <td>Role</td>
+                      <td>Action</td>
+                  </tr>
+              </thead>
+
+              <tbody>
+                  <tr *ngFor="let t of team">
+                    <td>{{ t.nom }}</td>
+                    <td>{{ t.email }}</td>
+                    <td>{{ t.phone }}</td>
+                    <td>{{ t.address }}</td>
+                    <td>{{ t.entreprise.nom }}</td>
+                    <td>{{ t.role_nom }}</td>
+                      <td>
+                          <div class="action_box">
+                            <button class="btn delete-button" (click)="deleteTeam(t.id)"><i class="fa fa-trash"></i></button>
+                            <button class="btn edit-button" (click)="open1(mymodal1)"><i class="fa fa-pencil"></i></button>
+
+                              <ng-template #mymodal1 let-modal>
+            
+                                <div class="modal-header">
+                                  <h4 class="modal-title" id="modal-basic-title">Edit User</h4>
+                                  <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                                    <span aria-hidden="true">×</span>
+                                  </button>
+                                </div>
+                            
+                                <div class="add-box">
+                                    <form class="formulaire" [formGroup]="form">
+                                      <div class="form-row">
+                                        <div class="form-group">
+                                          <label for="inputName">Name</label>
+                                          <input type="text" formControlName="nom" class="form-control" id="inputName" placeholder="{{t.nom}}">
+                                          <div *ngIf="form.controls['nom']?.invalid && (form.controls['nom']?.dirty || form.controls['nom']?.touched)" class="error-message">
+                                            <span *ngIf="form.controls['nom']?.errors?.['required']" style="color: rgb(146, 10, 10); margin-top: 10%; margin-bottom: 10%;">Name is required.</span>
+                                          </div>
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                          <label for="inputAdress">Address</label>
+                                          <input type="text" formControlName="address" class="form-control" id="inputAddress" placeholder="{{t.address}}">
+                                          <div *ngIf="form.controls['address']?.invalid && (form.controls['address']?.dirty || form.controls['address']?.touched)" class="error-message">
+                                            <span *ngIf="form.controls['address']?.errors?.['required']" style="color: rgb(146, 10, 10); margin-top: 10%; margin-bottom: 10%;">Address is required.</span>
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <div class="form-group col-md-6">
+                                        <label for="inputEmail">Email</label>
+                                        <input type="text" formControlName="email" class="form-control" id="inputEmail" placeholder="{{t.email}}">
+                                        <div *ngIf="form.controls['email']?.invalid && (form.controls['email']?.dirty || form.controls['email']?.touched)" class="error-message">
+                                          <span *ngIf="form.controls['email']?.errors?.['required']" style="color: rgb(146, 10, 10); margin-top: 10%; margin-bottom: 10%;">Email is required.</span>
+                                        </div>
+                                      </div>
+                                      <div class="form-group col-md-6">
+                                        <label for="inputPhone">Phone</label>
+                                        <input type="text" formControlName="phone" class="form-control" id="inputPhone" placeholder="{{t.phone}}">
+                                        <div *ngIf="form.controls['phone']?.invalid && (form.controls['phone']?.dirty || form.controls['phone']?.touched)" class="error-message">
+                                          <span *ngIf="form.controls['phone']?.errors?.['required']" style="color: rgb(146, 10, 10); margin-top: 10%; margin-bottom: 10%;">Phone is required.</span>
+                                        </div>
+                                      </div>
+                                      <div class="form-group col-md-6">
+                                        <label for="inputPassword">Password</label>
+                                        <input type="password" formControlName="password" class="form-control" id="inputPassword" placeholder="{{t.password}}">
+                                        <div *ngIf="form.controls['password']?.invalid && (form.controls['password']?.dirty || form.controls['password']?.touched)" class="error-message">
+                                          <span *ngIf="form.controls['password']?.errors?.['required']" style="color: rgb(146, 10, 10); margin-top: 10%; margin-bottom: 10%;">Password is required.</span>
+                                        </div>
+                                      </div>
+                                      <div class="form-group col-md-6">
+                                        <label for="inputRole">Role</label>
+                                        <select formControlName="role_nom" class="form-control" id="inputRole">
+                                          <option value="">Select a role</option>
+                                          <option *ngFor="let r of role" [value]="r.nom">{{ r.nom }}</option>
+                                        </select>
+                                        <div *ngIf="form.controls['role_nom']?.invalid && (form.controls['role_nom']?.dirty || form.controls['role_nom']?.touched)" class="error-message">
+                                          <span *ngIf="form.controls['role_nom']?.errors?.['required']" style="color: rgb(146, 10, 10); margin-top: 10%; margin-bottom: 10%;">Role is required.</span>
+                                        </div>
+                                      </div>
+                                      
+                                      <div class="form-group col-md-6">
+                                        <label for="inputCompany">Company</label>
+                                        <select formControlName="entreprise" class="form-control" id="inputCompany">
+                                          <option value="">Select a company</option>
+                                          <option *ngFor="let c of company" [value]="c.id">{{ c.nom }}</option>
+                                        </select>
+                                        <div *ngIf="form.controls['entreprise']?.invalid && (form.controls['entreprise']?.dirty || form.controls['entreprise']?.touched)" class="error-message">
+                                          <span *ngIf="form.controls['entreprise']?.errors?.['required']" style="color: rgb(146, 10, 10); margin-top: 10%; margin-bottom: 10%;">Company is required.</span>
+                                        </div>
+                                      </div>
+                                        <button type="submit" class="btn btn-outline-dark" style="margin-left: 170px; margin-top: 20px;" (click)="EditTeams(t.id)" [disabled]="form.invalid">Edit User</button>
+                                      </form>
+                                </div>
+                                
+                            </ng-template>
+                          </div>
+                      </td>
+                  </tr>
+              </tbody>
+          </table>
+      </div>
+      
+      
